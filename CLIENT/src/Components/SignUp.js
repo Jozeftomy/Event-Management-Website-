@@ -1,10 +1,9 @@
-// SignUp.js
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./SignUp.css";
-import { Link } from "react-router-dom";
-import axios from 'axios';
 
 const SignUp = () => {
+  let navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -23,26 +22,50 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     // Check if passwords match
     if (formData.password !== formData.rePassword) {
       alert("Passwords do not match!");
       return;
     }
-    // Send data via Axios
-    axios
-      .post('http://localhost:3000/register', {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone,
+
+    // Prepare headers and body for the API request
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      phone: formData.phone,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    // Make the API call
+    fetch("http://localhost:4000/users/add-user", requestOptions)
+      .then((response) => response.json()) // Ensure the response is converted to JSON
+      .then((result) => {
+        if (result.token) {
+          // Store the JWT token in localStorage
+          localStorage.setItem("emw token", result.token);
+          console.log(result); // Token from the server response
+          alert("User Registered successfully!");
+          navigate("/dashboard"); // Redirect to dashboard after successful signup
+        } else {
+          alert("Error registering user");
+        }
       })
-      .then((result) => console.log(result))
-      .catch((err) => console.log(err));
-  
-    console.log("Form submitted", formData);
+      .catch((err) => {
+        console.log(err);
+        alert("An error occurred. Please try again.");
+      });
   };
-  
 
   return (
     <div className="signup-container">
@@ -105,7 +128,7 @@ const SignUp = () => {
 
         <button type="submit" className="submit-button">Sign Up</button>
       </form>
-      <p>Already Have an Account</p>
+      <p>Already Have an Account?</p>
       <Link to="/login" className="login-option">Login</Link> 
     </div>
   );

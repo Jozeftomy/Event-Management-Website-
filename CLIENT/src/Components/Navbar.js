@@ -14,11 +14,6 @@ function Navbar() {
     
         <ul className="nav-menu">
           <li className="nav-item">
-            <Link to="/dashboard" className="nav-links">
-              DashBoard
-            </Link>
-          </li>
-          <li className="nav-item">
             <Link to="/login" className="nav-links">
               Login
             </Link>
