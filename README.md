@@ -5,4 +5,4 @@ invite guests, track RSVPs, and send reminders. The app allows custom invitation
 vendor management features, including search, communication, payments, and progress tracking. With secure login, two-factor authentication, password reset functionality, and a responsive
 design, the application ensures secure and seamless access across devices.
 <br/>
-Authors - Joseph,Ardra,Ayiman,Vignesh
+Authors - Joseph
